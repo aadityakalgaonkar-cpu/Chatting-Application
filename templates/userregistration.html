@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block css %}
+<style>
+
+body{
+    background:#0f172a;
+    overflow:hidden;
+}
+
+.register-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.register-card{
+    width:100%;
+    max-width:430px;
+    background:#1e293b;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 0 30px rgba(0,0,0,.35);
+}
+
+.register-card h1{
+    text-align:center;
+    margin-bottom:10px;
+    color:white;
+}
+
+.register-card p{
+    text-align:center;
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+.register-card input{
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    border:none;
+    outline:none;
+    border-radius:8px;
+    background:#334155;
+    color:white;
+    font-size:15px;
+}
+
+.register-card input::placeholder{
+    color:#cbd5e1;
+}
+
+.register-card button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    background:#38bdf8;
+    color:#111827;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.register-card button:hover{
+    background:#0ea5e9;
+}
+
+.login-link{
+    margin-top:20px;
+    text-align:center;
+}
+
+.login-link a{
+    color:#38bdf8;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.footer{
+    position:fixed;
+    bottom:15px;
+    left:0;
+    width:100%;
+    text-align:center;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <h1>Create Account 🚀</h1>
+
+        <p>Join RealTime Chat and start chatting instantly.</p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input type="text" name="username" placeholder="Username" required>
+
+            <input type="email" name="email" placeholder="Email Address" required>
+
+            <input type="password" name="password" placeholder="Password" required>
+
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+        <br><br>
+        {% if username_error %}
+            <p style="color:red; margin-top:-10px; margin-bottom:15px;">
+
+            {{ username_error }}
+
+        {% endif %}
+
+        {% if password_error %}
+        
+            <p style="color:red; margin-top:-10px; margin-bottom:15px;">
+
+            {{ password_error }}
+
+        {% endif %}
+        <p class="login-link">
+            Already have an account?
+            <a href="/login/">Login</a>
+        </p>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 RealTime Chat Application
+</div>
+
+{% endblock %}
+

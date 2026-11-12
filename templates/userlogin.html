@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | RealTime Chat</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,Helvetica,sans-serif;
+        }
+
+        body{
+            background:#0f172a;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            overflow:hidden;
+        }
+
+        .login-card{
+            width:400px;
+            background:#1e293b;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 0 30px rgba(0,0,0,.4);
+        }
+
+        h1{
+            color:white;
+            text-align:center;
+            margin-bottom:10px;
+        }
+
+        p{
+            color:#94a3b8;
+            text-align:center;
+            margin-bottom:25px;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+            margin-bottom:18px;
+            border:none;
+            outline:none;
+            border-radius:8px;
+            background:#334155;
+            color:white;
+            font-size:15px;
+        }
+
+        button{
+            width:100%;
+            padding:14px;
+            border:none;
+            border-radius:8px;
+            background:#38bdf8;
+            color:#111827;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0ea5e9;
+        }
+
+        .register{
+            margin-top:20px;
+            text-align:center;
+            color:white;
+        }
+
+        .register a{
+            color:#38bdf8;
+            text-decoration:none;
+            font-weight:bold;
+        }
+        .footer{
+        position:fixed;
+        bottom:20px;
+        width:100%;
+        text-align:center;
+        color:#94a3b8;
+        font-size:14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <h1>Welcome Back 👋</h1>
+
+    <p>Login to continue chatting.</p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Username" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <div class="register">
+        Don't have an account?
+        <a href="/registration/">Register</a>
+    </div><br><br>
+    {% if loginerror %}
+    
+    <p style="color:red; margin-top:-10px; margin-bottom:15px;">
+    {{loginerror}}
+
+    {% endif %}
+
+</div>
+<div class="footer">
+    © 2026 RealTime Chat Application
+</div>
+</body>
+</html>
+

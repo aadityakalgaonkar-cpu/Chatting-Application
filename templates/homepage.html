@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block css %}
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    overflow:hidden;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:70px;
+    background:#1e293b;
+    border-bottom:2px solid #334155;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 30px;
+    z-index:1000;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#38bdf8;
+}
+
+/* ================= SEARCH ================= */
+
+.search{
+    width:450px;
+    position:relative;
+}
+
+.search input{
+    width:100%;
+    padding:12px 18px;
+    border:none;
+    outline:none;
+    border-radius:25px;
+    background:#334155;
+    color:white;
+    font-size:15px;
+}
+
+.search input::placeholder{
+    color:#cbd5e1;
+}
+
+#searchResults{
+    position:absolute;
+    top:55px;
+    width:100%;
+    background:#1e293b;
+    border-radius:10px;
+    border:1px solid #334155;
+    display:none;
+    overflow:hidden;
+    max-height:300px;
+    overflow-y:auto;
+}
+
+.result{
+    padding:15px;
+    cursor:pointer;
+    border-bottom:1px solid #334155;
+}
+
+.result:hover{
+    background:#334155;
+}
+
+/* ================= PROFILE ================= */
+
+.profile{
+    position:relative;
+}
+
+.user-btn{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#38bdf8;
+    color:#111827;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.dropdown{
+    position:absolute;
+    top:60px;
+    right:0;
+    width:200px;
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:10px;
+    display:none;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+.dropdown.show{
+    display:block;
+}
+
+.dropdown a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+}
+
+.dropdown a:hover{
+    background:#334155;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    display:flex;
+    margin-top:70px;
+    height:calc(100vh - 70px);
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:320px;
+    background:#172033;
+    border-right:1px solid #334155;
+}
+
+.sidebar-title{
+    padding:20px;
+    font-size:24px;
+    font-weight:bold;
+    border-bottom:1px solid #334155;
+}
+
+.chat-list{
+    height:100%;
+    overflow-y:auto;
+}
+.chat-item{
+display:flex;
+align-items:center;
+padding:15px;
+cursor:pointer;
+border-bottom:1px solid #334155;
+transition:.3s;
+}
+
+.chat-item:hover{
+background:#22304d;
+}
+
+.avatar{
+width:50px;
+height:50px;
+border-radius:50%;
+background:#38bdf8;
+color:#111827;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:bold;
+margin-right:15px;
+}
+
+.chat-info{
+flex:1;
+}
+
+.chat-info h4{
+margin:0;
+font-size:16px;
+}
+
+.chat-info p{
+margin-top:4px;
+font-size:13px;
+color:#94a3b8;
+}
+
+.empty-chat{
+    padding:20px;
+    color:#94a3b8;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.content h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.content p{
+    color:#94a3b8;
+    font-size:18px;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="navbar">
+
+    <div class="logo">
+        💬 RealTime Chat
+    </div>
+
+    <div class="search">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search username..."
+        >
+
+        <div id="searchResults"></div>
+
+    </div>
+
+    <div class="profile">
+
+        <div class="user-btn" id="profileBtn">
+            {{ request.user.username|first|upper }}
+        </div>
+
+        <div class="dropdown" id="dropdownMenu">
+
+            <a href="#">👤 Profile</a>
+
+            <a href="#">💾 Chat Backup</a>
+
+            <a href="#">⚙ Settings</a>
+
+            <a href="/logout/">🚪 Logout</a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="main">
+
+    <div class="sidebar">
+
+        <div class="sidebar-title">
+
+            Chats
+
+        </div>
+
+        <div class="chat-list">
+
+{% if chat_list %}
+
+{% for chat in chat_list %}
+
+<div class="chat-item" onclick="window.location.href='/chat/{{ chat.conversation_id }}/'">
+
+<div class="avatar">{{ chat.username|first|upper }}</div>
+
+<div class="chat-info">
+
+<h4>{{ chat.username }}</h4>
+
+<p>Click to continue chatting</p>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty-chat">
+
+No chats yet.<br><br>
+
+Search for a user above to start chatting.
+
+</div>
+
+{% endif %}
+
+</div>
+
+    </div>
+
+    <div class="content">
+
+        <h1>
+
+            Welcome {{ request.user.username }} 👋
+
+        </h1>
+
+        <p>
+
+            Search for a registered user to start chatting.
+
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ================= Profile Dropdown ================= */
+
+const profileBtn = document.getElementById("profileBtn");
+const dropdown = document.getElementById("dropdownMenu");
+
+profileBtn.addEventListener("click", function(e){
+
+    e.stopPropagation();
+
+    dropdown.classList.toggle("show");
+
+});
+
+document.addEventListener("click", function(){
+
+    dropdown.classList.remove("show");
+
+});
+
+
+/* ================= User Search ================= */
+
+const searchInput = document.getElementById("searchInput");
+const results = document.getElementById("searchResults");
+
+searchInput.addEventListener("keyup", function(){
+
+    let query = this.value.trim();
+
+    if(query === ""){
+
+        results.style.display = "none";
+        results.innerHTML = "";
+        return;
+
+    }
+
+    fetch("/search-user/?q=" + encodeURIComponent(query))
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        results.innerHTML = "";
+
+        if(data.length === 0){
+
+            results.style.display = "none";
+            return;
+
+        }
+
+        results.style.display = "block";
+
+        data.forEach(user => {
+
+            results.innerHTML += `
+                <div class="result" onclick="openChat(${user.id})">
+                    👤 ${user.username}
+                </div>
+            `;
+
+        });
+
+    });
+
+});
+
+
+/* Hide search results when clicking outside */
+
+document.addEventListener("click", function(e){
+
+    if(!searchInput.contains(e.target) && !results.contains(e.target)){
+
+        results.style.display = "none";
+
+    }
+
+});
+
+
+/* ================= Open Chat ================= */
+
+function openChat(userId){
+
+    window.location.href = "/open-chat/" + userId + "/";
+
+}
+
+</script>
+
+{% endblock %}
